@@ -1,0 +1,15 @@
+[package]
+name = "jirclip"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.0", features = ["full"] }
+clipboard = "0.5.0"
+eframe = "0.21.3"
+open = "3.0.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+dirs = "4.0.0"
