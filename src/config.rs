@@ -8,8 +8,13 @@ use tokio::{
 
 #[derive(Serialize, Deserialize, Default, Debug)]
 pub struct Configuration {
+    pub instances: Vec<JiraInstance>,
+}
+
+#[derive(Serialize, Deserialize, Default, Debug, Clone)]
+pub struct JiraInstance {
+    pub prefix: String,
     pub organisations: Vec<String>,
-    pub jira_prefix: String,
 }
 
 pub async fn location() -> Option<String> {
@@ -40,12 +45,20 @@ pub async fn load_configuration(location: &str) -> Configuration {
         }),
         Err(e) => {
             if e.kind() == ErrorKind::NotFound {
-                save_configuration(Configuration {
-                    organisations: vec!["COOL_PROJECT".to_string(), "NICE_PROJECT".to_string()],
-                    jira_prefix: "https://jira.copany.com/browse/{TICKET}".to_string(),
-                }, location)
-                    .await
-                    .expect("Unable to write config");
+                save_configuration(
+                    Configuration {
+                        instances: vec![JiraInstance {
+                            organisations: vec![
+                                "COOL_PROJECT".to_string(),
+                                "NICE_PROJECT".to_string(),
+                            ],
+                            prefix: "https://jira.copany.com/browse/{TICKET}".to_string(),
+                        }],
+                    },
+                    location,
+                )
+                .await
+                .expect("Unable to write config");
             }
 
             Configuration::default()
